@@ -1,0 +1,16 @@
+{
+  "project": "مهمة الأمل",
+  "platform": "TikTok LIVE",
+  "canvas": "1920x1080",
+  "donation": {
+    "raised": 327,
+    "goal": 1000,
+    "currency": "USD",
+    "url": ""
+  },
+  "live": {
+    "viewers": 12500,
+    "timeSeconds": 2700
+  },
+  "currentStage": 3
+}
