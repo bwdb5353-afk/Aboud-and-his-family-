@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>لوحة تحكم — مهمة الأمل</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#080414;color:#fff;font-family:Arial,Tahoma,sans-serif}.wrap{max-width:980px;margin:auto;padding:20px}.panel{background:#110925;border:1px solid #6d51a0;border-radius:16px;padding:18px;margin-bottom:14px}h1{color:#ffd45b}h2{margin-top:0}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}label{display:block;color:#cfc6e7;margin-bottom:6px}input,textarea,button,select{width:100%;padding:12px;border-radius:10px;border:1px solid #51406f;background:#0a0618;color:#fff;font-size:16px}button{background:#5a3fb1;border:0;cursor:pointer;font-weight:700;margin-top:8px}.danger{background:#8f2f2f}.row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.doors{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.doorBtn{background:#1b1530;border:1px solid #51406f}.doorBtn.active{background:#17432f;border-color:#55e39a}.notice{color:#ffd45b}.links a{color:#8fc7ff}.hidden{display:none}@media(max-width:700px){.grid,.row{grid-template-columns:1fr}.doors{grid-template-columns:repeat(2,1fr)}}
+</style></head><body><div class="wrap">
+<h1>🔐 لوحة تحكم «مهمة الأمل»</h1>
+<div id="login" class="panel"><h2>دخول المدير</h2><p>هذه النسخة التجريبية تستخدم رمزًا محليًا؛ لا تعتبره حماية حقيقية للموقع العام.</p><input id="pin" type="password" placeholder="الرمز"><button onclick="login()">دخول</button></div>
+<div id="app" class="hidden">
+<div class="panel"><h2>المعلومات الأساسية</h2><div class="grid"><div><label>العنوان</label><input id="title"></div><div><label>الوصف</label><input id="subtitle"></div><div><label>الهدف بالدولار</label><input id="goal" type="number"></div><div><label>المبلغ الحالي</label><input id="raised" type="number"></div><div><label>الوقت بالدقائق</label><input id="minutes" type="number"></div><div><label>المرحلة الحالية</label><input id="current" type="number" min="1" max="10"></div></div><button onclick="save()">💾 حفظ التغييرات</button></div>
+<div class="panel"><h2>🚪 الأبواب</h2><p class="notice">اضغط على الأبواب لتحديد المفتوح منها.</p><div class="doors" id="doorBtns"></div></div>
+<div class="panel"><h2>🏆 نقاط الفرق</h2><div class="row"><input id="hope" type="number" placeholder="فريق الأمل"><input id="change" type="number" placeholder="فريق التغيير"><button onclick="save()">تحديث النقاط</button></div></div>
+<div class="panel"><h2>❤️ كيف تساعد؟</h2><textarea id="help" rows="5"></textarea><button onclick="save()">حفظ النص</button></div>
+<div class="panel links"><h2>🔗 الروابط</h2><p>صفحة البث: <a href="index.html" target="_blank">فتح الـOverlay</a></p><p>ضع رابط GoFundMe الحقيقي في النص أعلاه عند تجهيز النسخة النهائية.</p><button class="danger" onclick="logout()">تسجيل الخروج</button></div>
+</div></div>
+<script>
+const KEY="hopeState";const DEFAULT={title:"مهمة الأمل",subtitle:"معًا نفتح الأبواب... لنغيّر حياة إنسان",goal:1000,raised:327,time:2700,current:3,opened:[1,2],hope:12840,change:11560,help:["🔗 التبرع عبر رابط الحملة","💬 اكتب تعليقًا إيجابيًا","📲 شارك اللايف مع أصدقائك","🪽 ادعم فريقك بالتفاعل"]};
+let s={...DEFAULT,...JSON.parse(localStorage.getItem(KEY)||"{}")};
+function login(){if(document.getElementById("pin").value==="2026"){document.getElementById("login").classList.add("hidden");document.getElementById("app").classList.remove("hidden");load()}else alert("الرمز غير صحيح")}
+function load(){for(const k of ["title","subtitle","goal","raised","current","hope","change"])document.getElementById(k).value=s[k];document.getElementById("minutes").value=Math.floor(s.time/60);document.getElementById("help").value=s.help.join("\n");renderDoors()}
+function renderDoors(){let h="";for(let i=1;i<=10;i++)h+=`<button class="doorBtn ${s.opened.includes(i)?"active":""}" onclick="toggleDoor(${i})">🚪 ${i}<br>${s.opened.includes(i)?"مفتوح":"مغلق"}</button>`;document.getElementById("doorBtns").innerHTML=h}
+function toggleDoor(i){s.opened=s.opened.includes(i)?s.opened.filter(x=>x!==i):[...s.opened,i];renderDoors()}
+function save(){s.title=document.getElementById("title").value;s.subtitle=document.getElementById("subtitle").value;s.goal=+document.getElementById("goal").value;s.raised=+document.getElementById("raised").value;s.time=+document.getElementById("minutes").value*60;s.current=+document.getElementById("current").value;s.hope=+document.getElementById("hope").value;s.change=+document.getElementById("change").value;s.help=document.getElementById("help").value.split("\n").filter(Boolean);localStorage.setItem(KEY,JSON.stringify(s));alert("تم الحفظ")}
+function logout(){location.reload()}
+</script></body></html>

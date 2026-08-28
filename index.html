@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مهمة الأمل — LIVE Overlay</title>
+<style>
+:root{--bg:#080414;--panel:#110a28;--gold:#ffd45b;--muted:#c9c2dc;--green:#55e39a;--red:#ff6a58}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% 12%,#29104e 0,#090416 52%,#04020a 100%);color:#fff;font-family:Arial,Tahoma,sans-serif}.wrap{min-height:100vh;padding:22px}.top{text-align:center}.top h1{font-size:clamp(30px,5vw,54px);margin:0;color:var(--gold);text-shadow:0 0 22px #ffd45b55}.top p{font-size:18px;color:#eee;margin:4px 0 18px}.stats{max-width:1200px;margin:auto;display:grid;grid-template-columns:1fr 2fr 1fr;gap:12px}.card,.panel{background:#100925dd;border:1px solid #7458aa;border-radius:16px;padding:15px;box-shadow:0 8px 28px #0007}.label{color:var(--muted);font-size:14px}.big{font-size:30px;font-weight:800;color:var(--gold)}.progress{height:18px;background:#241a3c;border-radius:30px;overflow:hidden;margin-top:9px}.bar{height:100%;width:32.7%;background:linear-gradient(90deg,#49d98c,#ffd45b);transition:.4s}.doors{max-width:1200px;margin:18px auto;display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.door{height:145px;border-radius:18px;border:2px solid #3c425b;background:linear-gradient(#182033,#0c101a);display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:52px;font-weight:900}.door.open{border-color:var(--green);background:linear-gradient(#17432f,#0d2118)}.door.current{border-color:var(--gold);box-shadow:0 0 24px #ffd45b55}.door small{font-size:15px;color:#ddd;margin-top:5px}.bottom{max-width:1200px;margin:auto;display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:12px}.team{border-radius:14px;padding:13px;margin:8px 0}.hope{background:#082744;border:1px solid #289eff}.change{background:#3b1717;border:1px solid #ff6655}.list{line-height:1.9;font-size:16px}.footer{text-align:center;color:var(--gold);margin:16px}.adminLink{position:fixed;left:10px;bottom:8px;font-size:11px;color:#555;text-decoration:none}@media(max-width:800px){.stats,.bottom{grid-template-columns:1fr}.doors{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head><body><div class="wrap">
+<div class="top"><h1>❤️ <span id="title">مهمة الأمل</span></h1><p id="subtitle">معًا نفتح الأبواب... لنغيّر حياة إنسان</p></div>
+<div class="stats">
+<div class="card"><div class="label">🎯 الهدف</div><div class="big" id="goal">$1,000</div></div>
+<div class="card"><div class="label">📊 التقدم</div><div class="big" id="raised">$327 / $1,000</div><div class="progress"><div class="bar" id="bar"></div></div></div>
+<div class="card"><div class="label">⏱️ الوقت المتبقي</div><div class="big" id="timer">45:00</div></div>
+</div>
+<div class="doors" id="doors"></div>
+<div class="bottom">
+<div class="panel"><h2>🏆 الفرق</h2><div class="team hope">🪽 فريق الأمل<br><b id="hope">12,840</b> نقطة</div><div class="team change">🔥 فريق التغيير<br><b id="change">11,560</b> نقطة</div><div class="label">التفاعل + التعليقات = نقاط للفريق</div></div>
+<div class="panel"><h2>⭐ مراحل المهمة</h2><div class="list" id="stages"></div></div>
+<div class="panel"><h2>❤️ كيف تساعد؟</h2><div class="list" id="help">🔗 التبرع عبر رابط الحملة<br>💬 اكتب تعليقًا إيجابيًا<br>📲 شارك اللايف مع أصدقائك<br>🪽 ادعم فريقك بالتفاعل</div></div>
+</div><div class="footer" id="footer">❤️ شكرًا لكم من القلب... أنتم سبب الأمل ❤️</div>
+</div>
+<script>
+const defaultState={title:"مهمة الأمل",subtitle:"معًا نفتح الأبواب... لنغيّر حياة إنسان",goal:1000,raised:327,time:2700,current:3,opened:[1,2],hope:12840,change:11560,help:["🔗 التبرع عبر رابط الحملة","💬 اكتب تعليقًا إيجابيًا","📲 شارك اللايف مع أصدقائك","🪽 ادعم فريقك بالتفاعل"]};
+const stages=["البداية — نتعرف على القصة والهدف","سؤال الجمهور — أنتم تختارون","تحدي المذيع","صندوق المفاجأة","تحدي السرعة (60 ثانية)","اختيار الفريق","مضاعفة الأمل (هدف فرعي)","لغز الأمل","المرحلة الأخيرة (عد تنازلي)","باب الأمل (النهاية الكبرى)"];
+let state={...defaultState,...JSON.parse(localStorage.getItem("hopeState")||"{}")};
+function render(){document.getElementById("title").textContent=state.title;document.getElementById("subtitle").textContent=state.subtitle;document.getElementById("goal").textContent="$"+state.goal.toLocaleString();document.getElementById("raised").textContent="$"+state.raised.toLocaleString()+" / $"+state.goal.toLocaleString();document.getElementById("bar").style.width=Math.min(100,state.raised/state.goal*100)+"%";document.getElementById("hope").textContent=state.hope.toLocaleString();document.getElementById("change").textContent=state.change.toLocaleString();document.getElementById("help").innerHTML=state.help.map(x=>x+"<br>").join("");let d="";for(let i=1;i<=10;i++)d+=`<div class="door ${state.opened.includes(i)?"open":""} ${i===state.current?"current":""}">${i}<small>${state.opened.includes(i)?"مفتوح ✓":i===state.current?"المرحلة الحالية":"🔒 مغلق"}</small></div>`;document.getElementById("doors").innerHTML=d;document.getElementById("stages").innerHTML=stages.map((x,i)=>`<div>${i+1<state.current?"✅":i+1===state.current?"🟨":"🔒"} ${x}</div>`).join("")}render();setInterval(()=>{if(state.time>0){state.time--;localStorage.setItem("hopeState",JSON.stringify(state));document.getElementById("timer").textContent=String(Math.floor(state.time/60)).padStart(2,"0")+":"+String(state.time%60).padStart(2,"0")}},1000);document.getElementById("timer").textContent=String(Math.floor(state.time/60)).padStart(2,"0")+":"+String(state.time%60).padStart(2,"0");
+</script></body></html>
